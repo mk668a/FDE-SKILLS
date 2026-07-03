@@ -1,0 +1,55 @@
+id: ontology-map
+label: Ontology Map
+version: 1
+description: >
+  The domain model an FDE builds so the customer's data describes their real
+  world: Objects (entities), Links (relationships), and Actions (write-backs).
+  Method anchors: the Foundry ontology (Palantir), the Entity-Relationship model
+  (Peter Chen, 1976), and Domain-Driven Design — bounded contexts and aggregates
+  (Eric Evans). Slots persist so each engagement inherits the modeling instincts —
+  which entities recur, where system-of-record conflicts hide — learned before.
+slots:
+  - id: objects
+    label: Objects
+    required: true
+    kind: list
+    prompt: >
+      The core entities (Foundry Objects / DDD aggregates) — each name and the
+      real-world thing it represents.
+  - id: properties
+    label: Properties
+    required: true
+    kind: map
+    prompt: Per object, the key properties and the source system each comes from.
+  - id: links
+    label: Links
+    required: true
+    kind: list
+    prompt: >
+      Relationships between objects (E-R model, Chen), with cardinality
+      (1:1 / 1:N / N:N).
+  - id: actions
+    label: Actions
+    required: true
+    kind: list
+    prompt: The write-back actions users can take on objects, and what each changes.
+  - id: source_of_truth
+    label: Source of truth
+    required: true
+    kind: map
+    prompt: >
+      Per object, the system of record that is authoritative (and where systems
+      conflict today).
+  - id: access_controls
+    label: Access controls
+    required: false
+    kind: list
+    prompt: Who may see / edit which objects — regulatory and compliance boundaries.
+  - id: open_modeling_questions
+    label: Open modeling questions
+    required: false
+    kind: list
+    prompt: >
+      Unresolved modeling decisions (bounded-context seams, Evans) that need a
+      customer call to settle.
+evolved_slots: []

@@ -1,0 +1,52 @@
+id: findings-report
+label: Findings Report
+version: 1
+description: >
+  The discovery/assessment writeup a consultant or FDE produces after the
+  first weeks on an engagement. Method anchors: the Pyramid Principle and MECE
+  (Barbara Minto), current-vs-future-state gap analysis, and the impact/effort
+  matrix for prioritization. Slots persist so each new client's findings report
+  starts from the structure (and reusable framings) of every prior one.
+slots:
+  - id: context
+    label: Engagement context
+    required: true
+    kind: text
+    prompt: One paragraph — who the client is, why we are here, scope.
+  - id: current_state
+    label: Current state
+    required: true
+    kind: list
+    prompt: How things work today, observed (not assumed).
+  - id: key_findings
+    label: Key findings
+    required: true
+    kind: list
+    prompt: The material findings, each with the evidence that supports it.
+  - id: gaps
+    label: Gaps vs target
+    required: true
+    kind: list
+    prompt: >
+      Gap analysis — where current state falls short of the desired future state,
+      each gap concrete and evidenced.
+  - id: recommendations
+    label: Recommendations
+    required: true
+    kind: list
+    prompt: >
+      MECE recommendations (Minto), each tied to a finding and ordered by
+      impact/effort.
+  - id: quick_wins
+    label: Quick wins
+    required: false
+    kind: list
+    prompt: >
+      High-impact / low-effort items on the impact-effort matrix — deliverable in
+      the first 30 days to build momentum.
+  - id: open_questions
+    label: Open questions
+    required: false
+    kind: list
+    prompt: What we still need access or answers to.
+evolved_slots: []

@@ -1,0 +1,68 @@
+id: delivery-schedule
+label: Delivery Schedule
+version: 1
+description: >
+  The time-boxed plan for the engagement: phases, milestones, and the critical
+  path to go-live. Method anchors: Working-Backwards from the go-live date
+  (Amazon), the Critical Path Method (Kelley & Walker, 1959), phased
+  crawl-walk-run delivery, rolling-wave planning (PMI / PMBOK), and a Definition
+  of Done per phase (exit criteria). This is the one deliverable whose *structure*
+  recurs almost unchanged across engagements — the standard FDE arc is
+  discovery → integration → pilot → production → enablement — so /fde:draft
+  pre-fills the phasing, cadence, and exit criteria from the corpus of
+  engagements 1..N-1 and you mostly just set this client's dates.
+slots:
+  - id: go_live_target
+    label: Go-live target
+    required: true
+    kind: text
+    prompt: >
+      The date (or window) the client must be in production by, and what
+      "in production" concretely means. Everything else is planned by
+      Working-Backwards from here (Amazon).
+  - id: phases
+    label: Phases
+    required: true
+    kind: list
+    prompt: >
+      The crawl-walk-run phases (typically discovery → integration → pilot →
+      production → enablement). For each: goal, rough duration, and the single
+      thing that proves it's done.
+  - id: milestones
+    label: Milestones
+    required: true
+    kind: list
+    prompt: >
+      Dated checkpoints with an owner and a verifiable exit criterion
+      (Definition of Done). A milestone without a test for "done" is a wish.
+  - id: critical_path
+    label: Critical path
+    required: true
+    kind: list
+    prompt: >
+      The dependency chain that actually sets the end date (CPM). Which tasks,
+      if they slip a day, slip go-live by a day — versus those with slack.
+  - id: cadence
+    label: Cadence
+    required: true
+    kind: text
+    prompt: >
+      The recurring rhythm: standup frequency, steering / sponsor review cadence,
+      and the demo or checkpoint that closes each phase.
+  - id: external_dependencies
+    label: External dependencies
+    required: false
+    kind: list
+    prompt: >
+      Client-side blockers on the path: access provisioning, data availability,
+      security review, third-party sign-off. The things you can't unblock alone.
+  - id: buffer_and_replanning
+    label: Buffer & replanning
+    required: false
+    kind: text
+    prompt: >
+      Where the schedule holds slack, and the rolling-wave rule for re-planning
+      (PMBOK): near phases planned in detail, far phases planned coarsely and
+      refined as they approach.
+# Slots discovered in later engagements are appended here by /fde:promote.
+evolved_slots: []

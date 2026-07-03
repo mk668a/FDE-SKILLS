@@ -1,0 +1,47 @@
+id: risk-register
+label: Risk Register
+version: 1
+description: >
+  Risks to engagement success. Method anchors: Probability × Impact scoring
+  (PMI / PMBOK), the pre-mortem (Gary Klein, HBR 2007), and leading-vs-lagging
+  indicators. Slots persist across engagements: when you start engagement N,
+  /fde:draft pre-fills these slots from the corpus of engagements 1..N-1, flags
+  the gaps you still need to fill, and proposes novel slots discovered in this
+  engagement (schema evolution via /fde:promote).
+slots:
+  - id: top_risks
+    label: Top risks
+    required: true
+    kind: list
+    prompt: >
+      The highest-impact risks, ranked by Probability × Impact (PMI). Run a
+      pre-mortem (Klein): imagine the engagement has failed — what killed it?
+  - id: technical_risks
+    label: Technical risks
+    required: true
+    kind: list
+    prompt: Integration, data, infra, or scaling risks specific to the stack.
+  - id: organizational_risks
+    label: Organizational / stakeholder risks
+    required: true
+    kind: list
+    prompt: Sponsorship, budget, competing priorities, change-resistance.
+  - id: mitigations
+    label: Mitigations
+    required: true
+    kind: map
+    prompt: For each top risk, the planned mitigation and its owner.
+  - id: early_warning_signals
+    label: Early-warning signals
+    required: false
+    kind: list
+    prompt: >
+      Leading indicators (not lagging) per risk — observable signs it is starting
+      to materialize while there is still time to act.
+  - id: residual_risk
+    label: Residual risk after mitigation
+    required: false
+    kind: text
+    prompt: What risk remains even with mitigations in place.
+# Slots discovered in later engagements are appended here by /fde:promote.
+evolved_slots: []

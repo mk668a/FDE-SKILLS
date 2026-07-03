@@ -1,0 +1,54 @@
+id: enablement-plan
+label: Enablement Plan
+version: 1
+description: >
+  The plan that makes the customer self-sufficient — workshops, runbooks, and the
+  criteria for the customer team to operate the solution without us. An FDE ships
+  value, then ships the ability to run it. Method anchors: train-the-trainer +
+  Center of Excellence, the conscious-competence ladder (Noel Burch), Bloom's
+  taxonomy (Benjamin Bloom), and Crossing the Chasm (Geoffrey Moore) for turning
+  champions into power users. Slots persist so each engagement inherits the
+  enablement structure that reliably sticks the landing.
+slots:
+  - id: audience
+    label: Audience
+    required: true
+    kind: list
+    prompt: >
+      Who needs enabling — each role and their current skill level on the
+      conscious-competence ladder (Burch).
+  - id: target_capabilities
+    label: Target capabilities
+    required: true
+    kind: list
+    prompt: >
+      What each audience must do unaided by engagement end. Write as Bloom's-
+      taxonomy verbs (apply, analyze, create), not "understand".
+  - id: workshops
+    label: Workshops
+    required: true
+    kind: list
+    prompt: Sessions planned — topic, audience, format, duration.
+  - id: materials
+    label: Materials
+    required: true
+    kind: list
+    prompt: Runbooks, docs, and sandboxes handed over for self-service.
+  - id: self_sufficiency_criteria
+    label: Self-sufficiency criteria
+    required: true
+    kind: list
+    prompt: Observable signs the customer team can operate and extend the solution without us.
+  - id: champions_to_train
+    label: Champions to train
+    required: false
+    kind: list
+    prompt: >
+      Internal advocates to deepen into power users / in-house trainers seeding a
+      Center of Excellence (crossing the chasm, Moore).
+  - id: handover_risks
+    label: Handover risks
+    required: false
+    kind: list
+    prompt: What threatens self-sufficiency after we leave, and the de-risk move.
+evolved_slots: []

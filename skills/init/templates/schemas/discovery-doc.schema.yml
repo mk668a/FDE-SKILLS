@@ -1,0 +1,66 @@
+id: discovery-doc
+label: Discovery Doc
+version: 1
+description: >
+  The requirements-translation artifact an FDE produces before building: it
+  turns an operational problem stated in the customer's words into a technical
+  spec the build can start from (the Echo→Delta handoff). Method anchors:
+  Jobs-To-Be-Done (Clayton Christensen / Tony Ulwick), Five Whys (Sakichi
+  Toyoda, Toyota), The Mom Test (Rob Fitzpatrick), and Amazon's Working-Backwards
+  / PR-FAQ. Slots persist so each engagement inherits the framings that reliably
+  move a fuzzy ask to a buildable one — and the success criteria that prove value
+  early.
+slots:
+  - id: operational_problem
+    label: Operational problem
+    required: true
+    kind: text
+    prompt: >
+      The broken workflow or decision in the customer's own words. Frame as a
+      Job-To-Be-Done (Christensen) — the progress they are trying to make — not a
+      feature request or a guessed solution.
+  - id: current_workflow
+    label: Current workflow
+    required: true
+    kind: list
+    prompt: >
+      How the work is done today — steps, tools, handoffs. Use Five Whys (Toyoda)
+      to get past the symptom to the step that actually stalls.
+  - id: desired_outcome
+    label: Desired outcome
+    required: true
+    kind: text
+    prompt: What "working" looks like operationally, not technically.
+  - id: success_criteria
+    label: Success criteria
+    required: true
+    kind: list
+    prompt: >
+      Measurable acceptance criteria / OKR-style key results — the proof of value,
+      defined before building (Amazon Working-Backwards).
+  - id: technical_requirements
+    label: Technical requirements
+    required: true
+    kind: list
+    prompt: >
+      The operational problem translated into spec — data, integrations,
+      workflows, access. Resist solutioning before the problem is validated
+      (The Mom Test, Fitzpatrick).
+  - id: constraints
+    label: Constraints
+    required: true
+    kind: list
+    prompt: Regulatory / compliance, security, timeline, and access constraints that bound the build.
+  - id: gravel_road
+    label: Gravel road (first cut)
+    required: false
+    kind: text
+    prompt: >
+      The fast, pragmatic first solution to ship for proof before generalizing —
+      the "gravel road" in Palantir's gravel-road→paved-highway model.
+  - id: assumptions
+    label: Assumptions to validate
+    required: false
+    kind: list
+    prompt: What we are assuming pending confirmation — each one a risk if wrong.
+evolved_slots: []

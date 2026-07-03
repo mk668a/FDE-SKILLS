@@ -1,0 +1,74 @@
+id: integration-spec
+label: Integration Spec
+version: 1
+description: >
+  The data-pipeline / integration design at the technical core of the FDE role —
+  the part that separates an FDE from a delivery consultant. It walks the
+  canonical path Ingestion → Cleaning/Normalization → Ontology(Objects) → UI.
+  Method anchors: Medallion architecture / bronze-silver-gold (Databricks),
+  data contracts (Chad Sanderson), idempotency keys (Stripe), exponential
+  backoff with jitter (AWS, Marc Brooker), SLO/SLI (Google SRE), and the Foundry
+  ontology (Palantir). Slots persist so each engagement inherits the integration
+  patterns (auth flows, reliability defaults, volume/latency targets) that recur.
+slots:
+  - id: source_systems
+    label: Source systems
+    required: true
+    kind: list
+    prompt: >
+      Each system we read from — type (DB / REST / GraphQL / files / stream),
+      owner, access path, and the data contract (schema + SLA) we depend on.
+  - id: auth_and_access
+    label: Auth & access
+    required: true
+    kind: list
+    prompt: >
+      Auth flow per source (OAuth 2.0 / SAML / SCIM / API key), secrets in a vault
+      (never inline), and network path (VPC / private link).
+  - id: ingestion
+    label: Ingestion
+    required: true
+    kind: list
+    prompt: >
+      How each source lands — batch vs stream, CDC (change data capture) for
+      incremental, cadence, and expected volume per run.
+  - id: transform
+    label: Cleaning / normalization
+    required: true
+    kind: list
+    prompt: >
+      Cleaning, schema mapping, dedup, normalization that makes sources joinable.
+      Structure as Medallion layers (Databricks): bronze raw → silver cleaned →
+      gold serving.
+  - id: ontology_objects
+    label: Ontology objects
+    required: true
+    kind: map
+    prompt: >
+      The Objects / Links / Actions the cleaned data maps to (Palantir Foundry
+      ontology) — the model end users reason over.
+  - id: reliability
+    label: Reliability
+    required: true
+    kind: list
+    prompt: >
+      Idempotency keys (Stripe-style), retry with exponential backoff + jitter
+      (AWS / Brooker), rate limiting, and failure handling per stage.
+  - id: targets
+    label: Volume / latency targets
+    required: true
+    kind: text
+    prompt: >
+      Throughput, end-to-end latency, and freshness expressed as SLOs/SLIs
+      (Google SRE) the pipeline must hold.
+  - id: surface
+    label: User surface
+    required: false
+    kind: text
+    prompt: The UI / API surface end users actually touch, and what they do there.
+  - id: open_dependencies
+    label: Open dependencies
+    required: false
+    kind: list
+    prompt: Access, credentials, or answers still blocking the build.
+evolved_slots: []

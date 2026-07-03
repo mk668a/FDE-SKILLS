@@ -1,0 +1,48 @@
+id: stakeholder-map
+label: Stakeholder Map
+version: 1
+description: >
+  Who matters on the client side, what they want, and how to work with them.
+  Method anchors: MEDDPICC qualification (economic buyer, champion — Jack Napoli),
+  Mendelow's power/interest grid (Aubrey Mendelow), and the Mobilizer archetype
+  from The Challenger Customer (Brent Adamson & Matthew Dixon). Persisting this
+  schema means each engagement inherits the relationship archetypes you have
+  learned to spot.
+slots:
+  - id: economic_buyer
+    label: Economic buyer
+    required: true
+    kind: text
+    prompt: >
+      The MEDDPICC economic buyer — who controls budget and what outcome they are
+      accountable for.
+  - id: champion
+    label: Champion(s)
+    required: true
+    kind: list
+    prompt: >
+      Internal advocate(s) pulling the project forward, and why. Prefer Mobilizers
+      (Challenger Customer) who can drive consensus, not just talkers.
+  - id: blockers
+    label: Blockers / skeptics
+    required: true
+    kind: list
+    prompt: Who can stall or kill this, their objection, and the de-risk move.
+  - id: users
+    label: End users
+    required: true
+    kind: list
+    prompt: Who actually uses what we ship, and their day-to-day pain.
+  - id: influence_map
+    label: Influence / interest
+    required: false
+    kind: map
+    prompt: >
+      Mendelow's grid — place each stakeholder by power (high/low) × interest
+      (high/low): manage-closely / keep-satisfied / keep-informed / monitor.
+  - id: comms_cadence
+    label: Communication cadence
+    required: false
+    kind: map
+    prompt: Per stakeholder — channel and frequency that keeps them bought-in.
+evolved_slots: []
