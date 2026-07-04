@@ -1,6 +1,6 @@
 # FDE-SKILLS workspace config
-# Scaffolded by /fde:init. Edit to add deliverable types or anonymization rules.
-version: 1
+# Scaffolded by /fde:init. Edit to add deliverable types or identifiers to redact.
+version: 2
 
 # Deliverable types this workspace knows how to draft.
 # Each maps to a schema in .fde/schemas/<id>.schema.yml whose slots persist
@@ -31,20 +31,25 @@ deliverable_types:
     label: Enablement Plan
     schema: enablement-plan.schema.yml
 
-# Mechanical redaction applied by fde-promote.sh before any slot value
-# enters the shared corpus. The /fde:promote skill does the *semantic*
-# anonymization (paraphrase, strip identifying detail); these regexes are
-# the deterministic backstop so figures never leak even if the LLM misses one.
-anonymization:
-  redact_figures: true
-  rules:
-    - match: '\$[0-9][0-9,.]*'   # dollar amounts
-      replace: '$<REDACTED>'
-    - match: '[0-9]+%'           # percentages
-      replace: '<N>%'
+# Rule of Three: a pattern is a *candidate* at 1 sighting, *recurring* at 2,
+# and gets *paved* into the schema at `threshold` sightings. Read by
+# fde-promote.sh.
+paving:
+  threshold: 3
 
-# fde-validate.sh fails if any engagement slug or display_name appears in
-# .fde/corpus/. The corpus is the only place knowledge crosses engagements,
-# and it must be client-anonymous.
-confidentiality:
-  corpus_must_not_contain: engagement_identifiers
+# Deterministic redaction, applied by fde-promote.sh and enforced by
+# fde-validate.sh. The /fde:promote skill does the *semantic* anonymization
+# (paraphrase away client specifics); the scripts are the mechanical backstop:
+#   - dollar amounts and percentages are always stripped (hardcoded in
+#     fde-promote.sh),
+#   - engagement slugs + display-name tokens are always redacted and guarded
+#     (derived by fde-identifiers.sh),
+#   - extra_identifiers below are ALSO redacted and guarded — add person
+#     names, internal system names, project codenames here. The scripts
+#     cannot guess these; anything not listed relies on the LLM
+#     anonymization pass.
+anonymization:
+  extra_identifiers: []
+  # extra_identifiers:
+  #   - "Jane Smith"
+  #   - "MegaCRM"

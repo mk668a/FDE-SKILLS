@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 # fde-identifiers.sh — print the identifying tokens for an engagement, one per
 # line. Single source of truth shared by fde-promote.sh (what to redact) and
-# fde-validate.sh (what must never appear in the corpus). No LLM.
+# fde-validate.sh (what must never appear in the shared layers). No LLM.
 #
 #   usage: fde-identifiers.sh <client-slug>          # one engagement
 #          fde-identifiers.sh --all                  # every engagement
 #
-# Tokens = the slug, the full display_name, and each display_name word of length
-# >= 4 that is not a generic company suffix. Length>=4 + the stoplist keep
-# generic words ("Corp", "Inc", "Group") from triggering false redactions.
+# Tokens = the slug, the full display_name, each display_name word of length
+# >= 4 that is not a generic company suffix, PLUS every entry in
+# .fde/config.yml -> anonymization.extra_identifiers (person names, internal
+# system names, codenames — things no script can derive from the client name).
+# Length>=4 + the stoplist keep generic words ("Corp", "Inc", "Group") from
+# triggering false redactions.
 set -euo pipefail
+FDE_ROOT="${FDE_ROOT:-.fde}"
 ENG_ROOT="${ENG_ROOT:-engagements}"
 
 # generic words that are not identifying on their own
@@ -32,12 +36,35 @@ emit_for() {
   done
 }
 
+# workspace-level extra identifiers from config.yml (anonymization block).
+# Accepts:   - "Jane Smith"   or   - Jane Smith   (2-or-4-space indent)
+emit_extra() {
+  local cfg="$FDE_ROOT/config.yml"
+  [ -f "$cfg" ] || return 0
+  awk '
+    /^anonymization:/               { inblk=1; next }
+    inblk && /^[^[:space:]]/        { inblk=0 }
+    inblk && /^[[:space:]]+extra_identifiers:[[:space:]]*\[\]/ { next }
+    inblk && /^[[:space:]]+extra_identifiers:/ { inlist=1; next }
+    inblk && inlist {
+      if ($0 !~ /^[[:space:]]+-[[:space:]]/) { inlist=0; next }
+      s=$0
+      sub(/^[[:space:]]+-[[:space:]]*/, "", s)
+      gsub(/^"|"$/, "", s)
+      if (length(s)) print s
+    }
+  ' "$cfg"
+}
+
 if [ "${1:-}" = "--all" ]; then
-  for d in "$ENG_ROOT"/*/; do
-    [ -d "$d" ] && emit_for "$(basename "$d")"
-  done | awk 'NF && !seen[$0]++'
+  {
+    for d in "$ENG_ROOT"/*/; do
+      [ -d "$d" ] && emit_for "$(basename "$d")"
+    done
+    emit_extra
+  } | awk 'NF && !seen[$0]++'
 else
   client="${1:-}"
   [ -z "$client" ] && { echo "usage: fde-identifiers.sh <client-slug>|--all" >&2; exit 1; }
-  emit_for "$client" | awk 'NF && !seen[$0]++'
+  { emit_for "$client"; emit_extra; } | awk 'NF && !seen[$0]++'
 fi

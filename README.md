@@ -2,383 +2,262 @@
 
 # FDE-SKILLS
 
-**Your client engagements should compound. Right now they don't.**
+**The forward-deployed engineer's toolbox: the repos you actually run an engagement with, plus four Claude Code skills that make your deliverables compound across clients.**
 
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a>
 <img src="https://img.shields.io/badge/Claude_Code-skill_pack-d97757.svg" alt="Claude Code skill pack">
-<img src="https://img.shields.io/badge/skills-17-blue.svg" alt="17 skills">
+<img src="https://img.shields.io/badge/skills-4-blue.svg" alt="4 skills">
 <img src="https://img.shields.io/badge/hosted_backend-none-brightgreen.svg" alt="No hosted backend">
 
 English · [日本語](./docs/README.ja.md)
 
 </div>
 
-A Claude Code skill pack for Forward Deployed Engineers, delivery consultants, and
-embedded PMs. Every engagement you run produces the same *kinds* of deliverable:
-a risk register, a findings report, a stakeholder map. Today each one starts from
-a blank page. FDE-SKILLS makes the **schema** behind each deliverable persist and
-pre-populate across engagements, so client #3 starts where client #2's hard-won
-structure left off.
+You're on your third client this year. The deliverables are the same *kinds* of
+document every time: a risk register, an integration spec, a stakeholder map.
+Each one starts from a blank page, even though the last two engagements already
+taught you most of what belongs in them. And the tools that would help live in
+twenty scattered repos you keep re-discovering.
 
-No hosted backend. No API key. No vendor lock-in. The skills run on **your own
-Claude Code**; the spine underneath is plain shell. Your client data never leaves
-your machine.
+This repo is both halves of the fix:
 
----
-
-## 🚀 Quick start
-
-No marketplace. Clone the repo and run the installer. It's plain `cp` under the
-hood (read it first): it copies the 17 skills into your personal skills dir and
-the 2 shared subagents into your personal agents dir, both namespaced `fde-*` (so
-the generic names can't collide). The shell spine rides inside the `init` skill,
-so there's no second install location:
+1. **A curated toolbox** (below): the repositories worth installing for each
+   stage of an engagement, from discovery to handoff. Ordered by *when you
+   reach for them*, not by tool category.
+2. **Four skills of our own** for the one thing none of those repos ship:
+   **deliverables that remember.** Your deliverable schemas accumulate
+   evidence across engagements, and at the third recurrence a pattern is
+   *paved* into the schema itself. Install with one script, no marketplace, no
+   API key, no hosted backend:
 
 ```bash
 git clone https://github.com/mk668a/fde-skills
-cd fde-skills
-./install.sh                 # copies fde-* skills + subagents into ~/.claude
-# ./install.sh -u            # uninstall everything it copied
+cd fde-skills && ./install.sh     # plain cp under the hood; read it first
 ```
 
-Prefer to do it by hand? It's two copies (install.sh adds one `sed` on top: it
-also rewrites each skill's `name:` to `fde-*`, so the commands become
-`/fde-init`, `/fde-draft`, …; a bare copy leaves them as `/init`, `/draft`, which
-can clash):
+![The compounding wall](docs/dashboard.png)
 
-```bash
-# 1. skills (one dir each; init carries the spine templates with it)
-for d in skills/*/; do cp -R "$d" ~/.claude/skills/"fde-$(basename "$d")"; done
-# 2. the shared subagents (names already fde-*)
-cp agents/*.md ~/.claude/agents/
-```
-
-Then, in any engagement workspace, just describe what you want (or use the
-explicit command):
-
-```text
-set up fde here              # or /fde-init  (scaffolds .fde/: spine + schemas + empty corpus)
-new engagement with Acme     # or /fde-new "Acme Corp"
-```
-
-`/fde-init` copies the spine from its own bundled `templates/` (resolved via
-`${CLAUDE_SKILL_DIR}`) into your workspace's `.fde/`. From there the lifecycle
-skills take over. Everything runs on **your own Claude Code**; nothing is hosted.
+*The compounding wall (`.fde/dashboard.html`, rendered by plain shell): each
+column is a client, each bar a deliverable. Green slots were inherited from
+past engagements, blue were filled fresh. Left to right, the green grows.
+That's the product.*
 
 ---
 
-## 🔁 The compounding loop
+## 🧭 The toolbox
 
-A deliverable isn't a document. It's a **typed schema of slots**, and the schema
-lives in a shared workspace that outlives any single engagement.
+What to install for each stage of an engagement. Criteria for inclusion: the
+repo exists and is maintained, and it earns its place in real client work.
+(Star counts drift, so we don't print them; every entry was verified live.)
 
-```mermaid
-flowchart TB
-    E1["Engagement 1 · Acme<br/>risk-register<br/><b>6/10</b> · from scratch"]
-    E2["Engagement 2 · Globex<br/>risk-register<br/>6 inherited → <b>9/10</b>"]
-    E3["Engagement 3 · Initech<br/>risk-register<br/>9 inherited → <b>near-complete day 1</b>"]
-    C[("📚 .fde/corpus · anonymized priors<br/>safe to commit")]
+### Start here
 
-    E1 -->|promote| C
-    E2 -->|promote| C
-    E3 -->|promote| C
-    C -. inherit .-> E2
-    C -. inherit .-> E3
+| Repo | What it is | Form |
+|---|---|---|
+| [anthropics/skills](https://github.com/anthropics/skills) | Anthropic's official Agent Skills collection. The document skills (`docx`, `pptx`, `xlsx`, `pdf`) write the actual files clients expect back. | plugin / copy skill dirs |
 
-    classDef corpus fill:#1f2937,stroke:#111827,color:#f9fafb;
-    class C corpus;
-```
+### Discovery & scoping
 
-Solid arrows **promote** anonymized learnings up into the corpus; dashed arrows
-**inherit** them down into the next engagement. Coverage climbs left to right.
-That's the whole product.
+| Repo | What it is | Form |
+|---|---|---|
+| [github/spec-kit](https://github.com/github/spec-kit) | Spec-driven development: turn a fuzzy ask into an executable spec before you build. | CLI + slash commands |
+| [bmad-code-org/BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) | Agile AI-driven development framework with PM- and architect-style planning agents. | npm framework |
+| [snarktank/ai-dev-tasks](https://github.com/snarktank/ai-dev-tasks) | A lightweight PRD → task-list markdown workflow for AI dev agents. | copy .md files |
+| [obra/superpowers](https://github.com/obra/superpowers) | Brainstorming, plan writing/execution, systematic debugging, TDD and code review as skills. Serves discovery and the build alike. | plugin |
 
-It's the **gravel road → paved highway** pattern Palantir's forward-deployed
-model runs on: build a fast, client-specific solution (the gravel road), then
-generalize its durable structure into shared infrastructure the next engagement
-drives on (the paved highway). Here the paved highway is the typed schema +
-anonymized corpus, and `/fde-promote` is the move that paves it.
+### Build with the client
+
+| Repo | What it is | Form |
+|---|---|---|
+| [wshobson/agents](https://github.com/wshobson/agents) | Multi-domain plugin marketplace: hundreds of expert agents, skills and commands (architecture, security, data, docs). | plugin marketplace |
+| [affaan-m/ECC](https://github.com/affaan-m/ECC) | Agent harness optimization: skills, instincts, memory, hooks, rules. (Formerly `everything-claude-code`.) | config collection |
+| [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) | 100+ specialized subagents to copy into `.claude/agents/`. | copy .md files |
+| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | Official AI security review Action: run it before anything ships to the client. | GitHub Action |
+| [dlt-hub/dlt](https://github.com/dlt-hub/dlt) | Python data-loading pipelines; the fastest honest way to a data quick win. | pip |
+
+### Client deliverables
+
+| Repo | What it is | Form |
+|---|---|---|
+| [jgm/pandoc](https://github.com/jgm/pandoc) | The universal markup converter: markdown in, `docx`/`pdf`/anything out. | CLI |
+| [quarto-dev/quarto-cli](https://github.com/quarto-dev/quarto-cli) | Technical publishing on top of Pandoc: reports, dashboards, books. | CLI |
+| [marp-team/marp-cli](https://github.com/marp-team/marp-cli) | Markdown to slide decks (PPTX/PDF/HTML) from the command line. | CLI |
+| [mermaid-js/mermaid-cli](https://github.com/mermaid-js/mermaid-cli) | Render Mermaid diagrams to images for docs and decks. | CLI |
+| [terrastruct/d2](https://github.com/terrastruct/d2) | Text-to-diagram language that makes architecture diagrams reviewable in git. | CLI |
+
+### Client data safety
+
+| Repo | What it is | Form |
+|---|---|---|
+| [microsoft/presidio](https://github.com/microsoft/presidio) | PII detection, redaction and anonymization. Run it before client data touches anything shared. | pip |
+
+### Engagement management & handoff
+
+| Repo | What it is | Form |
+|---|---|---|
+| [makeplane/plane](https://github.com/makeplane/plane) | Self-hosted Jira/Linear alternative when the client can't give you a seat in theirs. | self-hosted |
+
+### Going deeper
+
+| Repo | What it is |
+|---|---|
+| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | The canonical Claude Code resource list. |
+| [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | Curated Claude skills across domains. |
+| [pierpaolo28/Awesome-FDE-Roadmap](https://github.com/pierpaolo28/Awesome-FDE-Roadmap) | The FDE *career* roadmap: learning resources, consulting frameworks, interview prep. Complements this list, which is about tooling. |
+
+Missing something you reach for every engagement? PRs welcome (see
+[Contributing](#-contributing)).
 
 ---
 
-## 🧱 Two layers
+## 🔁 Our four skills: deliverables that remember
 
-FDE-SKILLS is built as a deterministic spine under an LLM layer: the same
-"non-deterministic output, deterministic gate" discipline it asks you to trust.
-The LLM layer itself splits in two: the skills you invoke, and the shared
-subagents they delegate verbose, isolated work to.
+None of the repos above make engagement N easier than engagement N-1. That's
+the gap these four skills fill. A deliverable here is not a document: it is a
+**typed schema of slots**, and the schema is a versioned prior that hardens
+with evidence.
+
+| Skill | You say | It does |
+|---|---|---|
+| `/fde-init` | "set up fde here", "new engagement with Acme" | Scaffolds the `.fde/` spine (once) and one directory per client |
+| `/fde-draft` | "draft the risk register for Acme" | Fills the typed schema from this client's notes AND pre-fills from past engagements, then reports coverage |
+| `/fde-promote` | "make these learnings reusable" | Anonymizes, counts sightings, and paves at the third |
+| `/fde-recall` | "what did we learn about pilots like this?" | Surfaces anonymized priors, weighted by how often they recurred |
+
+You don't memorize the commands; each skill has a precise trigger description,
+so describing the outcome fires the right one.
+
+### The Rule of Three, made mechanical
+
+"Don't generalize from one example, extract on the third" (Fowler,
+*Refactoring*) is usually advice. Here it's a counter in a shell script:
+
+| Sightings | Tier | What `/fde-draft` does with it |
+|---|---|---|
+| ×1 | candidate | offers it as `[candidate ×1: confirm]` (one engagement's opinion) |
+| ×2 | recurring | offers it as `[candidate ×2: confirm]` |
+| ×3 | **paved** | pre-fills it by default; if it's a new dimension, the schema itself gains the slot and bumps its version |
+
+The pave moment is a real, git-diff-able change to your schema. Run the
+15-second proof yourself (no LLM involved, every number printed by the spine
+scripts):
+
+```console
+$ examples/demo.sh
+=== Engagement 1: Acme Corp: from scratch ===
+acme-corp: risk-register  ·  4/6 slots filled (66%) · 0 inherited · 4 new
+  candidate ×1: sso-auth-integration (technical_risks)
+  candidate ×1: rollback-plan (rollback_plan)
+
+=== Engagement 2: Globex: inherits Acme priors ===
+globex: risk-register  ·  5/6 slots filled (83%) · 2 inherited · 3 new
+  sighting ×2: sso-auth-integration (technical_risks)
+
+=== Engagement 3: Initech: third sighting PAVES the schema ===
+initech: risk-register  ·  6/6 slots filled (100%) · 5 inherited · 1 new
+  -> near-complete on day one: 5 of 6 slots inherited, not retyped.
+  sighting ×3: sso-auth-integration (technical_risks)
+PAVED: risk-register v1 -> v2: + rollback_plan (3 sightings)
+
+--- the schema itself just changed (git-diff-able expertise) ---
+  -version: 1
+  +version: 2
+  -evolved_slots: []
+  +evolved_slots:
+  +  - id: rollback_plan
+  +    label: Rollback plan
+  +    prompt: "How do we return to the pre-pilot state if go-live fails?"
+  +    paved_from: "3 sightings, 2026-07-04"
+
+=== Confidentiality check (shared layers must be client-anonymous) ===
+validate: OK: no client identifiers in corpus/ or research/
+```
+
+Three engagements in, `git diff .fde/schemas/` shows exactly what your clients
+taught you, with no client in it. Run `examples/demo.sh --live` to watch the
+same run on the auto-refreshing dashboard (that's how the screenshot above was
+made).
+
+### Two layers, honestly divided
 
 | Layer | What it is | Examples |
 |---|---|---|
-| **LLM skills** (`skills/*`) | Read messy notes, fill slots, anonymize, judge what's reusable | `/fde-draft`, `/fde-promote`, `/fde-onboard` |
-| **Shared subagents** (`agents/*`) | Isolated-context workers more than one skill delegates to, so heavy reading never floods the chat | `fde-retriever` (recall + answer), `fde-researcher` (research + answer) |
-| **Deterministic spine** (`.fde/bin/*.sh`) | Count, scaffold, redact, validate, render (no LLM, fully reproducible) | `fde-coverage.sh`, `fde-promote.sh`, `fde-validate.sh`, `fde-report.sh` |
+| **LLM skills** (`skills/*`) | Read messy notes, fill slots, paraphrase client specifics away, decide what's durable | `/fde-draft`, `/fde-promote` |
+| **Deterministic spine** (`.fde/bin/*.sh`) | Count, redact, gate, pave, render. No LLM, reproducible, auditable | `fde-coverage.sh`, `fde-promote.sh`, `fde-validate.sh`, `fde-dashboard.sh` |
 
-The coverage number you watch climb is computed by a shell script, not estimated
-by a model. The confidentiality guard that keeps client names out of the corpus
-is a shell script too, so you can trust it the same way every run. And the
-retrieval that backs `/fde-answer` runs in a subagent that physically cannot read
-another client's directory.
+The coverage numbers, the sighting counters, the redaction gate and the
+dashboard are all plain shell. The judgment calls are all yours (via your own
+Claude Code). Nothing here calls an LLM at runtime and nothing is hosted.
 
----
-
-## 💬 You don't memorize commands, you just talk
-
-There are 17 skills, but you rarely type a `/fde-` command. Each skill carries a
-precise *"use when…"* description, so Claude Code **auto-selects the right one
-from a plain-English prompt**. Describe the outcome; the matching skill fires.
-
-| You type (free prompt) | Skill that fires |
-|---|---|
-| "set up fde here" | `/fde-init` |
-| "new engagement with Globex, fintech pilot" | `/fde-new` |
-| "turn these call notes into a context map" | `/fde-onboard` |
-| "draft the integration spec for Acme" | `/fde-draft` |
-| "wrap up what we did today" | `/fde-log` |
-| "how complete is the risk register?" | `/fde-coverage` |
-| "research the HL7 FHIR standard" | `/fde-research` |
-| "what did we learn about pilots like this?" | `/fde-recall` |
-| "the client asked how we handle SSO failures, draft an answer" | `/fde-answer` |
-| "make these learnings reusable across clients" | `/fde-promote` |
-| "write this week's status for the sponsor" | `/fde-status` |
-| "export the risk register as a PDF" | `/fde-report` |
-| "check nothing client-identifying is leaking" | `/fde-validate` |
-
-The explicit `/fde-*` form still works when you want to force a specific skill,
-but treat it as the override, not the default. The slash table below is a map of
-what's available, not a syntax you have to recall.
-
----
-
-## 🧰 The 17 skills
-
-They form one lifecycle loop: set up once, then per engagement onboard →
-capture → log → draft → ship, and `promote` paves what you learned into the
-corpus that `recall` feeds back into the next `draft`. You trigger each by
-**describing what you want** (see above); the slash names are just labels for the
-diagram.
-
-```mermaid
-flowchart LR
-    init["/fde-init"] --> new["/fde-new"] --> onboard["/fde-onboard"]
-    onboard --> capture["/fde-capture"] --> log["/fde-log"] --> draft["/fde-draft"]
-    capture --> draft
-    draft --> coverage["/fde-coverage"]
-    draft --> report["/fde-report"]
-    log --> status["/fde-status"] --> handoff["/fde-handoff"]
-    status --> report
-    handoff --> promote["/fde-promote"]
-    recall["/fde-recall"] -. priors .-> draft
-    research["/fde-research"] -. reference .-> draft
-    promote -. corpus .-> recall
-    promote -. corpus .-> answer["/fde-answer"]
-    research -. reference .-> answer
-    answer -. new lessons .-> promote
-    validate["/fde-validate"] -. guards .-> promote
-
-    classDef hub fill:#1f2937,stroke:#111827,color:#f9fafb;
-    class draft,promote hub;
-```
-
-| Skill | When | Method anchor |
-|---|---|---|
-| `/fde-init` | Set up the `.fde/` workspace (once) | Idempotent scaffold (won't clobber) |
-| `/fde-new` | Start a new client engagement | Per-client directory isolation |
-| `/fde-onboard` | Turn first-week materials into a context map | Jobs-To-Be-Done (Christensen) + Five Whys (Toyoda) |
-| `/fde-capture` | Log a note / decision / risk / finding | Atomic note, routed to a slot |
-| `/fde-log` | Roll up the day into one dated journal entry | Standup three questions (Scrum) |
-| `/fde-draft` | **Draft a typed deliverable, inherits priors across clients** | Slot-schema inheritance |
-| `/fde-coverage` | See slot-fill rate and what's left | Definition of Done / exit criteria |
-| `/fde-research` | Research a topic on the web into the shared `research/` library | Source triangulation (primary > secondary) |
-| `/fde-recall` | Pull relevant anonymized priors from past engagements | Priors surfaced as patterns |
-| `/fde-answer` | Answer a client question, cited from the knowledge base | Retrieval-grounded, cited answer |
-| `/fde-promote` | Lift learnings into the shared corpus (anonymized) | Gravel road → paved highway (Palantir) |
-| `/fde-status` | Generate a client-facing status update | BLUF (Bottom Line Up Front) |
-| `/fde-report` | Render a deliverable to clean HTML / PDF (live mermaid) | Self-contained, zero-dep render |
-| `/fde-handoff` | Assemble an engagement closeout | Closeout against the context map |
-| `/fde-list` | Overview of all engagements + progress | Portfolio overview |
-| `/fde-schema` | Inspect / add deliverable types and slots | Typed schema evolution |
-| `/fde-validate` | Confidentiality + integrity guard | Identifier-leak gate |
-
----
-
-## 📦 The eight deliverable schemas
-
-FDE-SKILLS ships with eight deliverable schemas spanning the whole engagement
-arc, and you add your own with `/fde-schema`:
-
-```mermaid
-flowchart LR
-    subgraph tech["🔧 Technical core"]
-        direction TB
-        d["Discovery Doc"] --> i["Integration Spec"] --> o["Ontology Map"]
-    end
-    subgraph plan["🗓 Plan"]
-        ds["Delivery Schedule"]
-    end
-    subgraph deliver["📋 Delivery view"]
-        direction TB
-        rr["Risk Register"]
-        fr["Findings Report"]
-        sm["Stakeholder Map"]
-    end
-    subgraph exit["🚀 Exit"]
-        ep["Enablement Plan"]
-    end
-    tech --> plan --> deliver --> exit
-```
-
-Every slot prompt is **grounded in a named method**, so drafts come out in the
-vocabulary the work actually uses, not vague filler. A Discovery Doc leans on
-Jobs-To-Be-Done (Christensen), Five Whys (Toyoda) and Working-Backwards (Amazon);
-an Integration Spec on Medallion architecture (Databricks), idempotency keys
-(Stripe) and the Foundry ontology (Palantir); a Delivery Schedule on the Critical
-Path Method (Kelley & Walker) and Working-Backwards from go-live; a Stakeholder
-Map on Mendelow's power/interest grid and MEDDPICC; a Findings Report on the
-Pyramid Principle (Minto). Naming the method is also a precision trick: it anchors
-the model on an established framework instead of guessing.
-
-> `install.sh` namespaces the skills as `fde-*`, so the explicit commands are
-> `/fde-init`, `/fde-draft`, …. The repo / product is **FDE-SKILLS** (like the
-> `claude-code` repo whose command is `claude`).
-
----
-
-## ✨ A schedule, a daily record, reports, research, and cited answers
-
-The lifecycle adds five things an embedded engineer actually needs day to day:
-
-- **A schedule that compounds.** Delivery Schedule is the eighth deliverable, not
-  a one-off file. Its *structure* (the discovery → integration → pilot →
-  production → enablement arc, the cadence, the exit criteria) recurs almost
-  unchanged across clients, so `/fde-draft` pre-fills it from the corpus and you
-  mostly just set this client's dates (Working-Backwards from go-live; critical
-  path via CPM).
-- **A daily record.** `/fde-capture` logs atomic notes as they happen; `/fde-log`
-  rolls the day up into one dated `journal/<date>.md` (standup-style: done /
-  next / blocked). The day feeds the week (`/fde-status`) feeds the closeout
-  (`/fde-handoff`).
-- **Clean HTML / PDF reports.** `/fde-report` tidies a deliverable and renders a
-  self-contained HTML page with **live mermaid diagrams**, then a PDF on request.
-  Zero dependency: the HTML carries its own print CSS, so anyone can open it and
-  Print → Save as PDF. With headless Chrome installed, `--pdf` renders the
-  diagrams into the PDF directly.
-- **A shared research library.** `/fde-research` does web research into a
-  workspace-level `research/` dir that every engagement draws on: a data
-  standard, a vendor trade-off, a regulatory shape. It's client-agnostic and
-  commit-safe, guarded by the same identifier check as the corpus.
-- **Cited answers from the knowledge base.** `/fde-answer` takes a client's
-  question and composes a grounded reply that cites this engagement's notes, the
-  anonymized corpus, and the research library. Every claim is sourced and gaps are
-  flagged. Anything durable it surfaces routes back through `/fde-promote` or
-  `/fde-capture`, so answering also grows the knowledge base.
-
----
-
-## 🗂 Workspace layout
-
-`/fde-init` seeds this exact structure from the templates bundled in the `init`
-skill (`skills/init/templates/`, so the template tree and the scaffolded `.fde/`
-stay in lockstep: add a schema to `skills/init/templates/schemas/` and register
-it in `skills/init/templates/config.yml`, and every new workspace inherits it):
+### Workspace layout
 
 ```
-.fde/                          ← workspace spine (commit-safe: schemas + anonymized corpus)
-  config.yml                   deliverable types (8 seeded) + anonymization rules
-  schemas/                     slot definitions that persist & evolve across engagements
-    discovery-doc.schema.yml     ┐ technical core
-    integration-spec.schema.yml  │
-    ontology-map.schema.yml      ┘
-    delivery-schedule.schema.yml ← plan
-    risk-register.schema.yml     ┐ delivery view
-    findings-report.schema.yml   │
-    stakeholder-map.schema.yml   ┘
-    enablement-plan.schema.yml   ← exit
-  corpus/*.md                  anonymized cross-engagement priors (shared layer)
-  bin/*.sh                     deterministic scripts (no LLM), incl. fde-report.sh
-  index.yml                    registry of engagements
-research/                      ← SHARED, commit-safe: web-research briefs (/fde-research)
-  <topic>.md                   cited, client-agnostic, reusable by any engagement
-engagements/                   ← CONFIDENTIAL: one dir per client, never cross-read, never pushed
-  acme-corp/                     slug, auto-derived from "Acme Corp"
-    engagement.yml               client / status / started      (/fde-new)
-    onboard/
-      context-map.md             Who / Why / Scope / Constraints (/fde-onboard)
-    notes/
-      <date>-<kind>.md           atomic notes, decisions, risks  (/fde-capture)
-    journal/
-      <date>.md                  the day rolled up, standup-style (/fde-log)
-    deliverables/
-      <type>.md                  human-readable deliverable      (/fde-draft)
-      <type>.slots.yml           machine state for coverage      (/fde-draft)
-    status/
-      <date>.md                  client-facing update, BLUF + RAG (/fde-status)
-    reports/
-      <type>.html / .pdf         polished, hand-to-client render  (/fde-report)
-    answers/
-      <date>-<slug>.md           cited answer to a client question (/fde-answer)
-    handoff.md                   engagement closeout             (/fde-handoff)
-  globex/  ...                   another client, same shape, never cross-read
+.fde/                          the spine (commit-safe: schemas + anonymized corpus)
+  config.yml                   deliverable types + paving threshold + extra identifiers
+  schemas/<type>.schema.yml    slot definitions that evolve across engagements
+  corpus/<type>.yml            anonymized priors with sighting counters
+  bin/*.sh                     the deterministic scripts
+  dashboard.html               the compounding wall (never commit)
+engagements/                   CONFIDENTIAL: one dir per client, never cross-read
+  acme-corp/
+    engagement.yml, notes/, deliverables/
 ```
 
-`<type>` is one of the eight schema ids. The shape splits into two trust layers:
-**shared** dirs that compound across clients and are commit-safe (`.fde/corpus/`
-with anonymized deliverable priors, `research/` with client-agnostic reference),
-and the per-client `engagements/<client>/`, which stays confidential.
-`/fde-promote` is the only bridge from a client up into the corpus, and it
-anonymizes on the way.
+Eight deliverable schemas ship out of the box (discovery doc, integration
+spec, ontology map, delivery schedule, risk register, findings report,
+stakeholder map, enablement plan), each slot prompt anchored in a named method
+(pre-mortem, MEDDPICC, Pyramid Principle, Working-Backwards, ...).
 
 ---
 
-## 🔒 Confidentiality by construction
+## 🔒 Confidentiality: a gate, not a promise
 
-- Raw client material stays in `engagements/<client>/` and is never read across
-  clients. Add `engagements/*/onboard/`, `notes/`, `journal/`, `reports/` and
-  `answers/` to `.gitignore`.
-- The **only** path knowledge crosses engagements is `/fde-promote`, which
-  anonymizes first (semantic paraphrase by the skill, plus a deterministic regex
-  backstop that strips figures and known client identifiers). The shared
-  `research/` library is kept client-agnostic by construction.
-- `fde-validate.sh` fails the build if any client identifier (slug, name, or a
-  significant name token) appears anywhere in the shared layers (`.fde/corpus/`
-  **or** `research/`). Run it before you commit.
+Being precise about what is enforced and what is judgment:
+
+- **Enforced (deterministic):** `fde-validate.sh` fails if any engagement
+  slug, client-name token, or configured extra identifier appears in the
+  shared layers. `fde-promote.sh` builds the merged corpus in a temp file and
+  refuses to write it at all if the result would leak an identifier. Dollar
+  amounts and percentages are always stripped.
+- **Judgment (LLM + you):** person names, internal system names and "you'd
+  know it's them" phrasing are paraphrased away by the `/fde-promote` skill.
+  The scripts can't guess those, so anything you want *mechanically* guarded
+  forever goes into `anonymization.extra_identifiers` in `.fde/config.yml`.
+- The **only** path knowledge crosses engagements is `/fde-promote`. Skills
+  never read another client's `engagements/<other>/` directory.
 
 ### Do not push client material to GitHub
 
-Strongly recommended: **never push `engagements/` to a remote, public or
-private.** Commit only the anonymized `.fde/corpus/` (and only after
-`fde-validate.sh` passes). The safest setup is a separate, untracked workspace,
-or `engagements/` in `.gitignore`.
-
-Why this matters: a push to a remote is effectively irreversible. Once the data
-leaves your machine it can be cloned, forked, cached by GitHub, and indexed by
-code-search before you notice. **Deleting the file later does not undo this**: it
-stays in Git history, and rewriting history (force-push) cannot reach copies
-others already pulled or third-party caches already kept. A private repo is not
-a safe haven either: access changes, org transfers, and accidental
-visibility-flips happen. Treat any client name, figure, or internal detail that
-reaches a remote as potentially permanent and outside your control, which for
-most engagements is a contract and NDA breach. The anonymized corpus exists
-precisely so the *reusable structure* can be shared without the client behind it.
+`/fde-init` adds `engagements/` and `.fde/dashboard.html` to `.gitignore`.
+Keep it that way: a push to a remote is effectively irreversible (clones,
+forks, caches, code-search indexes), and a private repo is not a safe haven
+either. Commit only the anonymized `.fde/corpus/` and `.fde/schemas/`, and
+only after `fde-validate.sh` passes. For most engagements, a client name in a
+remote is a contract and NDA breach. The anonymized corpus exists precisely so
+the *reusable structure* can survive without the client behind it.
 
 ---
 
 ## ❓ Why "FDE"?
 
-Forward Deployed Engineer is the role this is shaped for: embedded, multi-client,
-deliverable-heavy. But anyone who runs the same *kinds* of deliverable across
-different clients (delivery consultants, embedded PMs, solutions architects) gets
-the same compounding. The name is the wedge; the mechanism is general.
+Forward Deployed Engineer is the role this is shaped for: embedded,
+multi-client, deliverable-heavy. But the toolbox and the compounding loop fit
+anyone who ships the same kinds of deliverable to different clients: delivery
+consultants, embedded PMs, solutions architects, fractional CTOs. The name is
+the wedge; the mechanism is general.
 
 ---
 
 ## 🤝 Contributing
 
-Issues and PRs welcome. The layout is small: each skill is one
-`skills/<name>/SKILL.md`, the shared subagents live in `agents/*.md`, and the
-spine `/fde-init` scaffolds lives in `skills/init/templates/`. Test locally with
-`./install.sh`. If a PR adds a skill or a schema, update both READMEs (English
-and Japanese).
+**Toolbox entries:** open a PR adding a row to the right stage. The bar:
+the repo exists, is maintained, and you actually reach for it in engagements.
+One line on what it does, no marketing copy.
+
+**Skills:** each skill is one `skills/<name>/SKILL.md`; the spine `/fde-init`
+scaffolds lives in `skills/init/templates/`. Test locally with `./install.sh`
+and `examples/demo.sh`. If a PR changes a skill or schema, update both READMEs
+(English and Japanese).
 
 ---
 

@@ -26,6 +26,6 @@ if [ -x "$FDE_ROOT/bin/fde-identifiers.sh" ]; then
 fi
 
 if [ "$fail" -eq 0 ]; then
-  echo "validate: OK — no client identifiers in corpus/ or research/"
+  echo "validate: OK: no client identifiers in corpus/ or research/"
 fi
 exit "$fail"
